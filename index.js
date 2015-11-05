@@ -6,6 +6,12 @@ module.exports = function (modulePath) {
     return modulePath
   }
 
-  var invokerParentFile = callsite()[2].getFileName()
-  return path.resolve(path.dirname(invokerParentFile), modulePath)
+  var stack = callsite()
+  var invokerFile = stack[1].getFileName()
+  for (var i = 2; i < stack.length; i++) {
+    var entryFile = stack[i].getFileName()
+    if (entryFile !== invokerFile) {
+      return path.resolve(path.dirname(entryFile), modulePath)
+    }
+  }
 }

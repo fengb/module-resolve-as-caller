@@ -15,11 +15,29 @@ describe('moduleResolveParent', function () {
     expect(converted).to.eq('chai')
   })
 
-  it('resolves relative to the directory of the invoker', function () {
-    var absPath = path.resolve(__dirname, '.')
-    expect(supportResolve('.')).to.eq(absPath)
+  context('relative to invoker', function () {
+    it('resolves', function () {
+      var absPath = path.resolve(__dirname, '.')
+      expect(supportResolve('.')).to.eq(absPath)
 
-    absPath = path.resolve(__dirname, '..')
-    expect(supportResolve('..')).to.eq(absPath)
+      absPath = path.resolve(__dirname, '..')
+      expect(supportResolve('..')).to.eq(absPath)
+    })
+
+    it('resolves nested within same file', function () {
+      var absPath = path.resolve(__dirname, '.')
+      expect(supportResolve.nested('.')).to.eq(absPath)
+
+      absPath = path.resolve(__dirname, '..')
+      expect(supportResolve.nested('..')).to.eq(absPath)
+    })
+
+    it('resolves deeply nested within same file', function () {
+      var absPath = path.resolve(__dirname, '.')
+      expect(supportResolve.deeply('.')).to.eq(absPath)
+
+      absPath = path.resolve(__dirname, '..')
+      expect(supportResolve.deeply('..')).to.eq(absPath)
+    })
   })
 })
