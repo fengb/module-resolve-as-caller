@@ -40,4 +40,12 @@ describe('moduleResolveParent', function () {
       expect(supportResolve.deeply('..')).to.eq(absPath)
     })
   })
+
+  describe('.require', function () {
+    it('uses parent instead of current file', function () {
+      expect(function () {
+        moduleResolveParent.require('./support')
+      }).to.throw(/Cannot find module/)
+    })
+  })
 })
