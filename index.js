@@ -3,26 +3,31 @@ var callsite = require('callsite')
 
 module.exports = moduleResolveParent
 
-function moduleResolveParent (modulePath, start) {
+function moduleResolveParent (modulePath, upFiles) {
   if (modulePath[0] !== '.') {
     return modulePath
   }
 
-  if (start == null) {
-    start = 1
+  if (upFiles == null) {
+    upFiles = 1
   }
 
   var stack = callsite()
-  var invokerFile = stack[start].getFileName()
-  for (var i = start + 1; i < stack.length; i++) {
-    var entryFile = stack[i].getFileName()
-    if (entryFile !== invokerFile) {
-      return path.resolve(path.dirname(entryFile), modulePath)
+  var prevFile = __filename
+  for (var i = 1; i < stack.length; i++) {
+    var stackFile = stack[i].getFileName()
+    if (stackFile !== prevFile) {
+      if (upFiles === 0) {
+        return path.resolve(path.dirname(stackFile), modulePath)
+      } else {
+        prevFile = stackFile
+        upFiles--
+      }
     }
   }
 }
 
 moduleResolveParent.require = function (modulePath) {
-  var path = moduleResolveParent(modulePath, 2)
+  var path = moduleResolveParent(modulePath)
   return require(path)
 }
