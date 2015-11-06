@@ -1,7 +1,7 @@
-var moduleResolveParent = require('../..')
+var moduleResolveAsCaller = require('../..')
 
 var supportResolve = module.exports = function (path) {
-  return moduleResolveParent(path)
+  return moduleResolveAsCaller(path)
 }
 
 supportResolve.nested = function (path) {

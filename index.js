@@ -1,15 +1,23 @@
 var path = require('path')
 var callsite = require('callsite')
 
-module.exports = moduleResolveParent
-
-function moduleResolveParent (modulePath, upFiles) {
+var moduleResolveAsCaller = module.exports = function (modulePath, upFiles) {
   if (modulePath[0] !== '.') {
     return modulePath
   }
 
-  if (upFiles == null) {
-    upFiles = 1
+  var callerFile = findCallerFile(upFiles)
+  return path.resolve(path.dirname(callerFile), modulePath)
+}
+
+moduleResolveAsCaller.require = function (modulePath) {
+  var path = moduleResolveAsCaller(modulePath)
+  return require(path)
+}
+
+function findCallerFile (up) {
+  if (up == null) {
+    up = 1
   }
 
   var stack = callsite()
@@ -17,17 +25,12 @@ function moduleResolveParent (modulePath, upFiles) {
   for (var i = 1; i < stack.length; i++) {
     var stackFile = stack[i].getFileName()
     if (stackFile !== prevFile) {
-      if (upFiles === 0) {
-        return path.resolve(path.dirname(stackFile), modulePath)
+      if (up === 0) {
+        return stackFile
       } else {
         prevFile = stackFile
-        upFiles--
+        up--
       }
     }
   }
-}
-
-moduleResolveParent.require = function (modulePath) {
-  var path = moduleResolveParent(modulePath)
-  return require(path)
 }

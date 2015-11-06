@@ -1,17 +1,17 @@
 var expect = require('chai').expect
 var path = require('path')
-var moduleResolveParent = require('..')
+var moduleResolveAsCaller = require('..')
 
 var supportResolve = require('./support')
 
-describe('moduleResolveParent', function () {
+describe('moduleResolveAsCaller', function () {
   it('does not convert absolute modules', function () {
-    var converted = moduleResolveParent('/abs/path')
+    var converted = moduleResolveAsCaller('/abs/path')
     expect(converted).to.eq('/abs/path')
   })
 
   it('does not convert project modules', function () {
-    var converted = moduleResolveParent('chai')
+    var converted = moduleResolveAsCaller('chai')
     expect(converted).to.eq('chai')
   })
 
@@ -44,7 +44,7 @@ describe('moduleResolveParent', function () {
   describe('.require', function () {
     it('uses parent instead of current file', function () {
       expect(function () {
-        moduleResolveParent.require('./support')
+        moduleResolveAsCaller.require('./support')
       }).to.throw(/Cannot find module/)
     })
   })
