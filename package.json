@@ -1,7 +1,7 @@
 {
   "name": "module-resolve-as-caller",
-  "version": "0.1.0",
-  "description": "resolve relative paths as though it were in the caller's file",
+  "version": "0.1.1",
+  "description": "Resolve relative paths as though it were in the caller's file",
   "author": "Benjamin Feng <contact@fengb.info>",
   "main": "index.js",
   "homepage": "https://github.com/fengb/module-resolve-as-caller#readme",
