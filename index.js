@@ -1,13 +1,10 @@
+var resolve = require('resolve-from')
 var path = require('path')
 var callsite = require('callsite')
 
 var moduleResolveAsCaller = module.exports = function (modulePath, upFiles) {
-  if (modulePath[0] !== '.') {
-    return modulePath
-  }
-
   var callerFile = findCallerFile(upFiles)
-  return path.resolve(path.dirname(callerFile), modulePath)
+  return resolve(path.dirname(callerFile), modulePath)
 }
 
 moduleResolveAsCaller.require = function (modulePath) {
